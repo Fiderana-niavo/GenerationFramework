@@ -1,0 +1,52 @@
+import React , {useState, useEffect } from 'react';
+import { Link , useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { update[nomTableMj] } from '../service/[nomTableMj]Service';
+[importForeign]
+
+const PopUpUpdate[nomTableMj] = props => {
+    
+  [foreign]
+
+  const formDataUpdate = new FormData();
+  formDataUpdate.append('id[nomTableMn]', props.id[nomTableMn]);
+
+  const [formData, setFormData] = useState ({
+    [formData]
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    [condition]
+    
+    try {
+      const update = await update[nomTableMj](formDataUpdate);
+      if(update){
+        window.location.reload();
+      }else{
+        alert(update);
+        console.log(update);
+      }
+    } catch (error) {
+        console.log(error);
+    }
+    
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+          [inputUpdate]
+        <br/>
+        <button type="submit">Mettre a Jour</button> 
+      </form>
+    </div>
+  );
+}
+export default PopUpUpdate[nomTableMj];

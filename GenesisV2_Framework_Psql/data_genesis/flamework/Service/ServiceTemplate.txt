@@ -1,0 +1,52 @@
+import axios from "axios";
+import ApiUrl from "../api/ApiUrl";
+
+export async function select[nomTableMj]() {
+    try {
+        const response = await axios.get(ApiUrl+'tocrud[nomTableMn].do');
+        if (Array.isArray(response.data.o)) {
+            return response.data.o;
+        } else {
+            console.error('La réponse de l\'API n\'est pas un tableau JSON:', response.data);
+            return [];
+        }
+    } catch (error) {
+        // console.error('Erreur lors de la récupération des [nomTableMn]s:', error);
+        return [];
+    }
+}
+
+export async function update[nomTableMj](formData) {
+  try {
+    const response = await axios.post(ApiUrl+'update[nomTableMn].do', formData);
+    return true;
+  } catch (error) {
+    console.error('Erreur lors de la mise a jour des données:', error);
+    const erreur = "Erreur lors de la mise a jour: " + error;
+    return erreur;
+  }
+}
+
+export async function delete[nomTableMj](formData) {
+    try {
+      const response = await axios.post(ApiUrl+'delete[nomTableMn].do', formData);
+      return true;
+  
+    } catch (error) {
+      console.error('Erreur lors de la suppression des données:', error);
+      const erreur = "Erreur lors de la suppression: " + error;
+      return erreur;
+    }
+}
+
+export async function insert[nomTableMj](formData) { 
+    try {
+      const response = await axios.post(ApiUrl+'insert[nomTableMn].do', formData)
+      return true;
+
+    } catch (error) {
+      console.error('Erreur lors de l\'insertion des données:', error);
+      const erreur = "Erreur lors de l'insertion: " + error;
+      throw error;
+    }
+}

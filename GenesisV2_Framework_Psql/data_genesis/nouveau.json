@@ -1,0 +1,4 @@
+{
+    "imports": "import select[nomtablemaj] from './pages';",
+    "mappings": "{\n\tpath: 'select[nomtablemin]',\n\telement: <select[nomtablemaj]/> },\n{\n\tpath: 'insertion[nomtablemin]',\n\telement: <insertion[nomtablemaj]/>\n},"
+}
