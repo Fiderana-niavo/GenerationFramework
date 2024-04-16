@@ -56,18 +56,35 @@ public class Nouveau {
     public void changementAppMain(Entity[] entities, String nomprojet) throws Exception {
         String importation = new String();
         String mapping = new String();
+        String liste = new String();
 
         for (Entity entity : entities) {
             importation = importation + "\n" + this.imports.replace("[nomtablemaj]", tableMaj(entity.getClassName()));
             mapping = mapping + "\n" + this.mappings.replace("[nomtablemin]", entity.getClassName().toLowerCase())
                     .replace("[nomtablemaj]", tableMaj(entity.getClassName()));
+            liste = liste + this.generateListe(entity);
         }
 
         String filepath = nomprojet + "/web/src/main.jsx";
+        String header = nomprojet + "/web/src/composants/Header.jsx";
+        String Header = this.readFile(header);
+        Header = Header.replace("[Projet Framework]", nomprojet);
+        Header = Header.replace("[li]", liste);
         String contenue = this.readFile(filepath);
         contenue = contenue.replace("[importpage]", importation);
         contenue = contenue.replace("[mappinglienpage]", mapping);
         this.rewriteFile(filepath, contenue);
+        this.rewriteFile(header, Header);
     }
 
+    public String generateListe(Entity entity) throws Exception {
+        String liste = new String();
+        liste = "<li className=\"menu-item\"> \n"+
+          " <Link to={\"/select"+entity.getClassName().toLowerCase()+"\"} className=\"menu-link menu-toggle\"> \n"+
+            "   <div data-i18n=\"Authentications\">"+entity.getClassName()+"</div> \n"+
+          " </Link> \n"+
+        "</li> \n";
+        return liste;
+    }
+ 
 }

@@ -3,6 +3,7 @@ import { Link , useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { update[nomTableMj] } from '../service/[nomTableMj]Service';
 [importForeign]
+import Header from '../composants/Header.jsx';
 
 const PopUpUpdate[nomTableMj] = props => {
     
@@ -41,10 +42,13 @@ const PopUpUpdate[nomTableMj] = props => {
 
   return (
     <div>
+    <Header />
       <form onSubmit={handleSubmit}>
           [inputUpdate]
         <br/>
-        <button type="submit">Mettre a Jour</button> 
+        <div className="mb-3">
+          <button id="basic-default-fullname" class="form-control" type="submit">Mettre a Jour</button> 
+        </div>
       </form>
     </div>
   );

@@ -442,7 +442,7 @@ public class Language {
 
         String directory = projectName + "/composants/";
         try {
-            creerDossier(directory);
+            // creerDossier(directory);
             Constantes c = new Constantes();
             // String contentFile = "D:\\GenesisV2_Framework_Psql\\Generateur\\GenesisV2_Framework_Psql\\template\\composant.templ";
             String contentFile = c.VIEW_LISTE_COMPOSANT;
@@ -477,8 +477,8 @@ public class Language {
 
             // Écriture du contenu dans le fichier
             try {
-                writeToFile(directory + className + ".jsx", content);
-                System.out.println("Fichier créé avec succès : " + directory + className + ".jsx");
+                writeToFile(projectName + "/web/src/composants/" + className + ".jsx", content);
+                System.out.println("Fichier créé avec succès : " +projectName + "/web/src/composants/" + className + ".jsx");
             } catch (IOException e) {
                 System.err.println("Erreur lors de l'écriture dans le fichier : " + e.getMessage());
                 return null;
@@ -495,9 +495,7 @@ public class Language {
 
         String directory = projectName + "/pages/";
         try {
-            creerDossier(directory);
             Constantes c = new Constantes();
-            // String contentFile = "D:\\GenesisV2_Framework_Psql\\Generateur\\GenesisV2_Framework_Psql\\template\\page.templ";
             String contentFile = c.VIEW_LISTE_PAGE;
             String content = HandyManUtils.getFileContent(contentFile);
 
@@ -512,7 +510,6 @@ public class Language {
                 String fieldNameMin = HandyManUtils.minStart(ef.getName());
                 String classNameMin = HandyManUtils.minStart(entity.getClassName());
                 tableHeader += getView().getViewTableHeader();
-                // Concaténer les valeurs de chaque champ à tableLine
                 tableLineTd += thDebut + HandyManUtils.minStart(ef.getName()) + thFin;
                 content = content.replace("[fieldId]", HandyManUtils.minStart(ef.getName()));
                 content = content.replace("[propsType]", "PropTypes.string");
@@ -520,7 +517,6 @@ public class Language {
 
             }
 
-            // Remplacer [tableLine] par la valeur complète de tableLine
             content = content.replace("[headerTab]", tableLineTd);
             content = content.replace("[fields]", column);
 
@@ -530,9 +526,8 @@ public class Language {
             content = content.replace("[classNameMin]", HandyManUtils.minStart(entity.getClassName()));
             content = content.replace("[variable]", HandyManUtils.minStart(entity.getClassName()));
 
-            // Écriture du contenu dans le fichier
             try {
-                writeToFile(directory + "Select" + className + ".jsx", content);
+                writeToFile(projectName  + "/web/src/pages/Select" + className + ".jsx", content);
                 System.out.println("Fichier créé avec succès : " + directory + className + ".jsx");
             } catch (IOException e) {
                 System.err.println("Erreur lors de l'écriture dans le fichier : " + e.getMessage());
@@ -545,51 +540,7 @@ public class Language {
 
         return directory;
     }
-
-    /*public String generateService(Entity entity, String projectName) throws IOException {
-        // Chemin complet du répertoire service
-        String serviceDirectory = projectName + "/services/";
-
-        // Créer le répertoire service s'il n'existe pas
-        creerDossier(serviceDirectory);
-
-        // Chemin du fichier de contenu
-        String contentFilePath = "D:\\GenesisV2_Framework_Psql\\Generateur\\GenesisV2_Framework_Psql\\template\\service.temp";
-
-        // Lire le contenu du fichier
-        String content;
-        try {
-            content = HandyManUtils.getFileContent(contentFilePath);
-        } catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier de contenu : " +
-                    e.getMessage());
-            return null; // Ou lancez une exception si vous préférez
-        }
-
-        // Remplacement des placeholders dans le contenu
-        content = content.replace("[classNameMaj]",
-                HandyManUtils.majStart(entity.getClassName()));
-        content = content.replace("[classNameMin]",
-                HandyManUtils.minStart(entity.getClassName()));
-        content = content.replace("[projectName]", projectName);
-
-        String className = HandyManUtils.majStart(entity.getClassName());
-        content = content.replace("[classNameMaj]", className);
-
-        // Écriture du contenu dans le fichier
-        try {
-            writeToFile(serviceDirectory + className + "Service.jsx", content);
-            System.out.println("Fichier créé avec succès : " + serviceDirectory +
-                    className + ".jsx");
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'écriture dans le fichier : " +
-                    e.getMessage());
-            return null; // Ou lancez une exception si vous préférez
-        }
-
-        return serviceDirectory;
-    }*/
-
+    
     public void creerDossier(String serviceDirectory) {
         try {
             File directory = new File(serviceDirectory);
@@ -635,7 +586,7 @@ public class Language {
             return String.valueOf(content);
         }
     
-        public void generateViewUpdate(Entity entity ) throws IOException , Exception {
+        public void generateViewUpdate(Entity entity ,String nomprojet) throws IOException , Exception {
             String file = Constantes.UPDATE_VIEW_TEMPLATE;
             String template = lireFichier(file);
             String nomTable = HandyManUtils.majStart(entity.getTableName());
@@ -644,7 +595,7 @@ public class Language {
             String nomTableMn = HandyManUtils.minStart(nomTable);
             String updateForm = "";
             String foreign = " "; 
-            String nomFichier = "Update/Update"+ nomTable + ".jsx";
+            String nomFichier = nomprojet + "/web/src/pages/Update"+ nomTable + ".jsx";
             String importation = "";
     
             for(EntityField ef:entity.getFields()) {
@@ -713,7 +664,7 @@ public class Language {
         }
     
         public String generateInputeUpdateSimple(String label,String type) {
-            return "<label>" + label + ":\n        <input name='"+label+"' type='"+type+"' values={formData."+label+"} onChange={handleInputChange} /> \n </label> \n";
+            return "<div class='mb-3' id='form'> \n <label className='form-label'>" + label + "</label>\n <div className='navbar-nav align-items-center'> \n <div className='nav-item d-flex align-items-center'> \n      <input class='form-control border-0 shadow-none' name='"+label+"' type='"+type+"' values={formData."+label+"} onChange={handleInputChange} />  \n </div> \n </div>\n </div> \n";
         }
     
         public String generateSelectUpdateForeign(String label2,String label) {
@@ -722,18 +673,17 @@ public class Language {
             foreign += "{"+label+"s.map(("+label+",index) => ( \n";
             foreign +=          "<option key={index} value={"+label+".id"+label+"}> {"+label+".nom"+label+"}</option> \n";
             foreign += "))}";
-            select += "<label> \n" + label2 + ":\n            <select name='"+label+"'> \n   "+ foreign
-            +"\n          </select> \n </label> \n";
+            select += "<div class='mb-3' id='form'> \n <label className='form-label'>" + label2 + "</label>  \n            <select class='form-select' id='exampleFormControlSelect1' aria-label='Default select example'  name='"+label+"'> \n   "+ foreign
+            +"\n          </select> \n </div>";
             return select;
         }
     
         // generation Service
-        public void generateService(Entity entity) throws IOException,Exception {
-            // String template = lireFichier("D:/S5/GenesisV2_Framework_Psql/bin/data_genesis/flamework/Service/ServiceTemplate.templ");
+        public void generateService(Entity entity , String nomprojet) throws IOException,Exception {
             String template = lireFichier(Constantes.SERVICE_TEMPLATE);
             String nomTable = HandyManUtils.majStart(entity.getTableName());
             String nomTableMn = HandyManUtils.minStart(nomTable);
-            String nomFichier = "Services/"+nomTable+"Service"+".jsx";
+            String nomFichier = nomprojet + "/web/src/services/"+nomTable+"Service"+".jsx";
             template = template.replace("[nomTableMj]",nomTable);
             template = template.replace("[nomTableMn]",nomTableMn);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier))) {
@@ -745,10 +695,9 @@ public class Language {
     
         // generation API
         public void generateAPI(String nomProjet) throws IOException,Exception {
-            // String template = lireFichier("D:/S5/GenesisV2_Framework_Psql/bin/data_genesis/flamework/Api/ApiTemplate.templ");
             String template = lireFichier(Constantes.API_TEMPLATE);
             template = template.replace("[nomProjet]",nomProjet);
-            String nomFichier = "api/ApiUrl.jsx";
+            String nomFichier = nomProjet + "/web/src/api/ApiUrl.jsx";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier))) {
                 writer.write(template);
             } catch (Exception e) {
@@ -757,16 +706,16 @@ public class Language {
         }
 
         //Fiderana
-        public void generateInsertFile(Entity e)throws Exception{
-        GenerateInsert g=new GenerateInsert();
-        String input=GenerateInsert.lireFichier(getView().getInputTempl());
-        String select=GenerateInsert.lireFichier(getView().getSelectTempl());
-        String tempimportForeign=getView().getImportForeign();
-        String tempforeignList=GenerateInsert.lireFichier(getView().getForeignListe());
-        String tempFormData=GenerateInsert.lireFichier(getView().getFormdataAttribute());
-        String insertTemp=GenerateInsert.lireFichier(getView().getInsertTempl());
-        String insertEntite=getView().getImportInsertEntite();
-        String temp=g.generateInsertView(e, select, input, tempFormData, tempimportForeign, tempforeignList, insertTemp,insertEntite);
-        g.creationInsertion(temp, e);
-    }
+        public void generateInsertFile(Entity e , String nomprojet)throws Exception{
+            GenerateInsert g=new GenerateInsert();
+            String input=GenerateInsert.lireFichier(getView().getInputTempl());
+            String select=GenerateInsert.lireFichier(getView().getSelectTempl());
+            String tempimportForeign=getView().getImportForeign();
+            String tempforeignList=GenerateInsert.lireFichier(getView().getForeignListe());
+            String tempFormData=GenerateInsert.lireFichier(getView().getFormdataAttribute());
+            String insertTemp=GenerateInsert.lireFichier(getView().getInsertTempl());
+            String insertEntite=getView().getImportInsertEntite();
+            String temp=g.generateInsertView(e, select, input, tempFormData, tempimportForeign, tempforeignList, insertTemp,insertEntite);
+            g.creationInsertion(temp, e ,nomprojet);
+        }
 }

@@ -119,7 +119,7 @@ public class GenerateInsert {
         return temp;
     }
 
-    public void creationInsertion( String template,Entity e) throws Exception {
+    public void creationInsertion( String template,Entity e,String nomprojet) throws Exception {
         // path = "template/view/insertion.txt";
         // template=template.replace("[Champ]", this.creationChampToutColonne(t));
         // template=template.replace("[nomTable]", t.getNom());
@@ -128,7 +128,7 @@ public class GenerateInsert {
         // /// String nomFichier = path + "/" + tableName + "." +
         // dotnetOuJava.get("type");
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Insert/Insertion"+e.getTableName()+".jsx"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomprojet + "/web/src/pages/Insertion"+HandyManUtils.majStart(e.getTableName())+".jsx"))) {
         writer.write(template);
         } catch (Exception exe) {
             exe.printStackTrace();

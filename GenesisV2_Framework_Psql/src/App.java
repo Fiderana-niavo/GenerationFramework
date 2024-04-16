@@ -70,7 +70,6 @@ public class App {
             credentials=new Credentials(databaseName, user, pwd, host, useSSL, allowPublicKeyRetrieval);
             project=new File(projectName);
             project.mkdir();
-            language.generateAPI(projectName);
             for(CustomFile c:language.getAdditionnalFiles()){
                 customFilePath=c.getName();
                 customFilePath=customFilePath.replace("[projectNameMaj]", HandyManUtils.majStart(projectName));
@@ -94,19 +93,20 @@ public class App {
                 HandyManUtils.overwriteFileContent(projectNameTagPath, projectNameTagContent);
             }
             try(Connection connect=database.getConnexion(credentials)){
+                language.generateAPI(projectName);
                 entities=database.getEntities(connect, credentials, entityName);
                 System.out.println(entities.length);
                 for(int i=0;i<entities.length;i++){
                     entities[i].initialize(connect, credentials, database, language);
-                    language.generateInsertFile(entities[i]);
+                    language.generateInsertFile(entities[i],projectName);
                 }
                 models=new String[entities.length];
                 controllers=new String[entities.length];
                 views=new String[entities.length];
                 navLink="";
                 for(int i=0;i<models.length;i++){
-                    language.generateViewUpdate(entities[i]);
-                    language.generateService(entities[i]);
+                    language.generateViewUpdate(entities[i],projectName);
+                    language.generateService(entities[i],projectName);
                     models[i]=language.generateModel(entities[i], projectName);
                     controllers[i]=language.generateController(entities[i], database, credentials, projectName);
                     views[i]=language.generateView(entities[i], projectName);

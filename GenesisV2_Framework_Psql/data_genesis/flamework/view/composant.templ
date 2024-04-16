@@ -24,13 +24,17 @@ const [classNameMaj] = props => {
     const [isOpen, setIsOpen] = useState(false);
     
     return (
+        <div>
         <tr>
         [tableLine]
         <td>
             <button onClick={handleFormSubmit}>supprimer</button>
         </td>
+        <td>
+            <button><Link to={"/update[classNameMaj]/${props.id[classNameMin]}"}>modifier</Link></button>
+        </td>
         </tr> 
-       
+       </div>
     );
 };
 
